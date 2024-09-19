@@ -37,17 +37,17 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Apply patch
         run: |
-          cd ${{ GITHUB_WORKSPACE }}/${{ env.tailscale_source_path }}
-          git apply ${{ GITHUB_WORKSPACE }}/${{ env.build_repo_path }}/patches/*.patch
+          cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
+          git apply ${{ github.workspace }}/${{ env.build_repo_path }}/patches/*.patch
       - name: Build for linux/amd64, and push
         run: |
-          cd ${{ GITHUB_WORKSPACE }}/${{ env.tailscale_source_path }}
+          cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
           GOOS=linux GOARCH=amd64 PUSH=true \
             REPOS=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }} \
             ./build_docker.sh
       - name: Build for linux/arm64, and push
         run: |
-          cd ${{ GITHUB_WORKSPACE }}/${{ env.tailscale_source_path }}
+          cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
           GOOS=linux GOARCH=arm64 PUSH=true \
             REPOS=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }} \
             ./build_docker.sh
