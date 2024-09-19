@@ -1,0 +1,32 @@
+name: tailscale-derper-http
+
+services:
+  derper:
+    image: ${IMAGE_NAME}:${IMAGE_TAG}
+    volumes:
+      - type: volume
+        source: var-run-tailscale
+        target: /var/run/tailscale
+    ports:
+      - 8080:8080/tcp
+      - 3478:3478/udp
+    command:
+      - "derper"
+      - "--a"
+      - ":8080"
+      - "--verify-clients"
+      - "true"
+    restart: always
+  tailscale:
+    image: ${IMAGE_NAME}:${IMAGE_TAG}
+    volumes:
+      - type: volume
+        source: var-run-tailscale
+        target: /var/run/tailscale
+    environment:
+      - TS_AUTHKEY=${TAILSCALE_AUTHKEY}
+      - TS_HOSTNAME=${TAILSCALE_HOSTNAME}
+      - TS_SOCKET=/var/run/tailscale/tailscaled.sock
+    restart: always
+volumes:
+  var-run-tailscale:
