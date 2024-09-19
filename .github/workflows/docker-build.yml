@@ -19,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out build repo
-				with:
-					path: ${{ env.build_repo_path }}
+        with:
+          path: ${{ env.build_repo_path }}
       - name: Check out Tailscale Source Code
         uses: actions/checkout@v4
         with:
