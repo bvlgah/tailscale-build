@@ -1,0 +1,14 @@
+diff --git a/build_docker.sh b/build_docker.sh
+index 1cbdc4b..d2b22de 100755
+--- a/build_docker.sh
++++ b/build_docker.sh
+@@ -32,7 +32,8 @@ case "$TARGET" in
+       --gopaths="\
+         tailscale.com/cmd/tailscale:/usr/local/bin/tailscale, \
+         tailscale.com/cmd/tailscaled:/usr/local/bin/tailscaled, \
+-        tailscale.com/cmd/containerboot:/usr/local/bin/containerboot" \
++        tailscale.com/cmd/containerboot:/usr/local/bin/containerboot \
++        tailscale.com/cmd/derper:/usr/local/bin/derper" \
+       --ldflags="\
+         -X tailscale.com/version.longStamp=${VERSION_LONG} \
+         -X tailscale.com/version.shortStamp=${VERSION_SHORT} \
