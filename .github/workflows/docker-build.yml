@@ -39,15 +39,8 @@ jobs:
         run: |
           cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
           git apply ${{ github.workspace }}/${{ env.build_repo_path }}/patches/*.patch
-      - name: Build for linux/amd64, and push
+      - name: Build and push
         run: |
           cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
-          GOOS=linux GOARCH=amd64 PUSH=true \
-            REPOS=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }} \
-            ./build_docker.sh
-      - name: Build for linux/arm64, and push
-        run: |
-          cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
-          GOOS=linux GOARCH=arm64 PUSH=true \
-            REPOS=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }} \
+          PUSH=true REPOS=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }} \
             ./build_docker.sh
