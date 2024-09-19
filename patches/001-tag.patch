@@ -1,0 +1,13 @@
+diff --git a/build_docker.sh b/build_docker.sh
+index 1cbdc4b..7efe577 100755
+--- a/build_docker.sh
++++ b/build_docker.sh
+@@ -15,7 +15,7 @@ export PATH="$PWD"/tool:"$PATH"
+ eval "$(./build_dist.sh shellvars)"
+ 
+ DEFAULT_TARGET="client"
+-DEFAULT_TAGS="v${VERSION_SHORT},v${VERSION_MINOR}"
++DEFAULT_TAGS="v${VERSION_SHORT},latest"
+ DEFAULT_BASE="tailscale/alpine-base:3.18"
+ 
+ PUSH="${PUSH:-false}"
