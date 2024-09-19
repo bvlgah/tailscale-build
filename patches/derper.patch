@@ -7,7 +7,7 @@ index 1cbdc4b..d2b22de 100755
          tailscale.com/cmd/tailscale:/usr/local/bin/tailscale, \
          tailscale.com/cmd/tailscaled:/usr/local/bin/tailscaled, \
 -        tailscale.com/cmd/containerboot:/usr/local/bin/containerboot" \
-+        tailscale.com/cmd/containerboot:/usr/local/bin/containerboot \
++        tailscale.com/cmd/containerboot:/usr/local/bin/containerboot, \
 +        tailscale.com/cmd/derper:/usr/local/bin/derper" \
        --ldflags="\
          -X tailscale.com/version.longStamp=${VERSION_LONG} \
