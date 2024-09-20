@@ -7,15 +7,23 @@ services:
       - type: volume
         source: var-run-tailscale
         target: /var/run/tailscale
+      - type: volume
+        source: var-lib-tailscale
+        target: /var/lib/tailscale
     ports:
-      - 8080:8080/tcp
+      - 443:443/tcp
       - 3478:3478/udp
     command:
       - "derper"
-      - "--a"
-      - ":8080"
-      - "--verify-clients"
-      - "true"
+      - "--a=:443"
+      - "--verify-clients=true"
+      - "--hostname=127.0.0.1"
+      - "--certmode=manual"
+      - "--http-port=-1"
+      - "--certdir=/run/secrets"
+    secrets:
+      - 127.0.0.1.crt
+      - 127.0.0.1.key
     restart: always
   tailscale:
     image: ${IMAGE_NAME}:${IMAGE_TAG}
@@ -24,9 +32,15 @@ services:
         source: var-run-tailscale
         target: /var/run/tailscale
     environment:
-      - TS_AUTHKEY=${TAILSCALE_AUTHKEY}
       - TS_HOSTNAME=${TAILSCALE_HOSTNAME}
       - TS_SOCKET=/var/run/tailscale/tailscaled.sock
+      - TS_STATE_DIR=/var/lib/tailscale
     restart: always
 volumes:
   var-run-tailscale:
+  var-lib-tailscale:
+secrets:
+  127.0.0.1.crt:
+    file: data/127.0.0.1.crt
+  127.0.0.1.key:
+    file: data/127.0.0.1.key
