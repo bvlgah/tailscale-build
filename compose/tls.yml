@@ -43,7 +43,7 @@ volumes:
   var-run-tailscale:
   var-lib-tailscale:
 secrets:
-  derper-tls-crt:
+  derper-tls-cert:
     file: ${DERP_SERVER_CERT_SOURCE_PATH}
   derper-tls-key:
     file: ${DERP_SERVER_KEY_SOURCE_PATH}
