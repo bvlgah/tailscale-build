@@ -1,0 +1,48 @@
+name: Build Tailscale (including DERP) supporting self-signed certificates
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: "Version of Tailscale, e.g., v1.74.1"
+
+env:
+  tailscale_upstream_repo: tailscale/tailscale
+  tailscale_source_path: tailscale
+  build_repo_path: tailscale-build
+  docker_image_name: tailscale-self-signed
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out build repo
+        uses: actions/checkout@v4
+        with:
+          path: ${{ env.build_repo_path }}
+      - name: Check out Tailscale Source Code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.tailscale_upstream_repo }}
+          ref: ${{ github.event.inputs.version }}
+          path: ${{ env.tailscale_source_path }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Apply patches
+        run: |
+          cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
+          git apply ${{ github.workspace }}/${{ env.build_repo_path }}/patches/*.patch
+      - name: Apply patches to support self-signed certificates
+        run: |
+          cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
+          git apply ${{ github.workspace }}/${{ env.build_repo_path }}/patches/self-signed/*.patch
+      - name: Build and push
+        run: |
+          cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
+          PUSH=true REPOS=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }} \
+            ./build_docker.sh
