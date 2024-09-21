@@ -1,4 +1,4 @@
-name: tailscale-derper-http
+name: tailscale-derper-https
 
 services:
   derper:
@@ -10,11 +10,13 @@ services:
       - type: volume
         source: var-lib-tailscale
         target: /var/lib/tailscale
-      - type: bind
-        source: ${DERP_SERVER_CERT_SOURCE_DIR}
-        target: ${DERP_SERVER_CERT_TARGET_DIR}
+    secrets:
+      - source: derper-tls-cert
+        target: /run/secrets/${DERP_SERVER_HOSTNAME}.crt
+      - source: derper-tls-key
+        target: /run/secrets/${DERP_SERVER_HOSTNAME}.key
     ports:
-      - 443:443/tcp
+      - 8080:443/tcp
       - 3478:3478/udp
     command:
       - "derper"
@@ -22,7 +24,8 @@ services:
       - "--verify-clients=true"
       - "--hostname=${DERP_SERVER_HOSTNAME}"
       - "--http-port=-1"
-      - "--certdir=${DERP_SERVER_CERTIFICATE_TARGET_DIR}"
+      - "--certmode=manual"
+      - "--certdir=/run/secrets"
     restart: always
   tailscale:
     image: ${IMAGE_NAME}:${IMAGE_TAG}
@@ -31,11 +34,16 @@ services:
         source: var-run-tailscale
         target: /var/run/tailscale
     environment:
-      - TS_HOSTNAME=${TAILSCALE_HOSTNAME}
-      - TS_SOCKET=/var/run/tailscale/tailscaled.sock
-      - TS_STATE_DIR=/var/lib/tailscale
-      - TS_AUTH_ONCE=true
+      - "TS_HOSTNAME=${TAILSCALE_HOSTNAME}"
+      - "TS_SOCKET=/var/run/tailscale/tailscaled.sock"
+      - "TS_STATE_DIR=/var/lib/tailscale"
+      - "TS_AUTH_ONCE=true"
     restart: always
 volumes:
   var-run-tailscale:
   var-lib-tailscale:
+secrets:
+  derper-tls-crt:
+    file: ${DERP_SERVER_CERT_SOURCE_PATH}
+  derper-tls-key:
+    file: ${DERP_SERVER_KEY_SOURCE_PATH}
