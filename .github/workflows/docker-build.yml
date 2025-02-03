@@ -36,7 +36,7 @@ jobs:
       - name: Apply patches
         run: |
           cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
-          git apply --3way ${{ github.workspace }}/${{ env.build_repo_path }}/patches/*.patch
+          git apply ${{ github.workspace }}/${{ env.build_repo_path }}/patches/*.patch
       - name: Build and push
         run: |
           cd ${{ github.workspace }}/${{ env.tailscale_source_path }}
