@@ -26,6 +26,8 @@ services:
       - "--http-port=-1"
       - "--certmode=manual"
       - "--certdir=/run/secrets"
+    networks:
+      - net
     restart: always
   tailscale:
     image: ${IMAGE_NAME}:${IMAGE_TAG}
@@ -38,6 +40,8 @@ services:
       - "TS_SOCKET=/var/run/tailscale/tailscaled.sock"
       - "TS_STATE_DIR=/var/lib/tailscale"
       - "TS_AUTH_ONCE=true"
+    networks:
+      - net
     restart: always
 volumes:
   var-run-tailscale:
@@ -47,3 +51,5 @@ secrets:
     file: ${DERP_SERVER_CERT_SOURCE_PATH}
   derper-tls-key:
     file: ${DERP_SERVER_KEY_SOURCE_PATH}
+networks:
+  net:
