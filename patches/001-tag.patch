@@ -1,13 +1,13 @@
 diff --git a/build_docker.sh b/build_docker.sh
-index 15105c2ef..f4f87deda 100755
+index 4552f8d..d3f1f60 100755
 --- a/build_docker.sh
 +++ b/build_docker.sh
-@@ -15,7 +15,7 @@ export PATH="$PWD"/tool:"$PATH"
+@@ -25,7 +25,7 @@ export PATH="$PWD"/tool:"$PATH"
  eval "$(./build_dist.sh shellvars)"
  
  DEFAULT_TARGET="client"
 -DEFAULT_TAGS="v${VERSION_SHORT},v${VERSION_MINOR}"
 +DEFAULT_TAGS="v${VERSION_SHORT},latest"
- DEFAULT_BASE="tailscale/alpine-base:3.19"
+ DEFAULT_BASE="tailscale/alpine-base:3.22"
  # Set a few pre-defined OCI annotations. The source annotation is used by tools such as Renovate that scan the linked
  # Github repo to find release notes for any new image tags. Note that for official Tailscale images the default
