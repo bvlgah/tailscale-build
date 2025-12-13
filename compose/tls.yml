@@ -7,9 +7,6 @@ services:
       - type: volume
         source: var-run-tailscale
         target: /var/run/tailscale
-      - type: volume
-        source: var-lib-tailscale
-        target: /var/lib/tailscale
     secrets:
       - source: derper-tls-cert
         target: /run/secrets/${DERP_SERVER_HOSTNAME}.crt
@@ -35,6 +32,9 @@ services:
       - type: volume
         source: var-run-tailscale
         target: /var/run/tailscale
+      - type: volume
+        source: var-lib-tailscale
+        target: /var/lib/tailscale
     environment:
       - "TS_HOSTNAME=${TAILSCALE_HOSTNAME}"
       - "TS_SOCKET=/var/run/tailscale/tailscaled.sock"
